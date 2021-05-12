@@ -213,22 +213,24 @@ async def on_shutdown(app):
 	pcs.clear()
 
 
+def init_func(argv):
+	app = web.Application()
+	app.on_shutdown.append(on_shutdown)
+	app.router.add_get("/", index)
+	app.router.add_get("/client.js", javascript)
+	app.router.add_post("/offer", offer)
+	return app
+
 if __name__ == "__main__":
-
-
-	logging.basicConfig(level=logging.INFO)
-
 	# if args.cert_file:
 	# 	ssl_context = ssl.SSLContext()
 	# 	ssl_context.load_cert_chain(args.cert_file, args.key_file)
 	# else:
 	# 	ssl_context = None
 
-	app = web.Application()
-	app.on_shutdown.append(on_shutdown)
-	app.router.add_get("/", index)
-	app.router.add_get("/client.js", javascript)
-	app.router.add_post("/offer", offer)
-	web.run_app(
-		app, access_log=None, host='0.0.0.0', port='8080', ssl_context=None
-	)
+	app = init_func(None)
+	try:
+		web.run_app(
+			app, access_log=None, host='0.0.0.0', port='8080', ssl_context=None)
+	except Exception as e :
+		raise e
