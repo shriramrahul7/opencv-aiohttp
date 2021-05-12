@@ -1,5 +1,3 @@
-import argparse
-import asyncio
 import json
 import logging
 import os
@@ -212,21 +210,11 @@ async def offer(request):
 async def on_shutdown(app):
 	# close peer connections
 	coros = [pc.close() for pc in pcs]
-	await asyncio.gather(*coros)
 	pcs.clear()
 
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(
-		description="WebRTC audio / video / data-channels demo"
-	)
-	parser.add_argument(
-		"--host", default="0.0.0.0", help="Host for HTTP server (default: 0.0.0.0)"
-	)
-	parser.add_argument(
-		"--port", type=int, default=8080, help="Port for HTTP server (default: 8080)"
-	)
-	args = parser.parse_args()
+
 
 	logging.basicConfig(level=logging.INFO)
 
@@ -242,5 +230,5 @@ if __name__ == "__main__":
 	app.router.add_get("/client.js", javascript)
 	app.router.add_post("/offer", offer)
 	web.run_app(
-		app, access_log=None, host=args.host, port=args.port, ssl_context=None
+		app, access_log=None, host='0.0.0.0', port='8080', ssl_context=None
 	)
