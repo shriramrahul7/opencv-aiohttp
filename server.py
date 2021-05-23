@@ -231,6 +231,6 @@ if __name__ == "__main__":
 	app = init_func(None)
 	try:
 		web.run_app(
-			app, access_log=None, host='0.0.0.0', port='8080', ssl_context=None)
+			app, access_log=None, host='127.0.0.1', port='8080', ssl_context=None)
 	except Exception as e :
 		raise e
